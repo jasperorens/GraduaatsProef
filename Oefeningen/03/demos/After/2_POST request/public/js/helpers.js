@@ -64,3 +64,5 @@ function showProgress(value, id) {
 function removeProgress(id) {
     document.querySelector(`div.img-progress[data-event-id='${id}']`).innerHTML = '';
 }
+
+<!-- node .\index.js -->

@@ -70,16 +70,44 @@
                             <td class="max-50">
                                 <button type="button" class="btn btn-primary btn-primary-themed btn-md font-upper" onclick="document.getElementById('spanTickets').innerHTML = ++(document.getElementById('spanTickets').innerHTML)">Add to Cart</button>
                             </td>
-                        </tr>               
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
   <script>
-      fetch('api/events')
-          .then(response => response.json())
-          .then(events => showEvents(events));
+/*
+      fetch('api/events', {
+          method: 'GET',
+          headers:{
+              Accept: 'text/xml'
+          }
+      })
+          .then(response => response.text())
+          .then(events => console.log(events));
+              */
+        fetch('api/events')
+            .then(response => response.json())
+            .then(events => showEvents(events));
+
+        function addToCart(id, quantity) {
+            fetch('api/cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({id: id, quantity: quantity})
+            })
+                .then(response => {
+                    if (response.status === 200){
+                        fetch('api/cart')
+                            .then(response => response.json())
+                            .then(cart => updateCart(cart));
+                    }
+                });
+        }
   </script>
   </body>
 </html>
+<!-- node .\index.js -->
