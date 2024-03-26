@@ -105,6 +105,9 @@
                             .then(response => response.json())
                             .then(cart => updateCart(cart));
                     }
+                    else {
+                        showError('Somehting went wrong!');
+                    }
                 });
         }
   </script>
