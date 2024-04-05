@@ -96,6 +96,11 @@
                     var img = decodeChunks(chunks);
                     showImage(img, event.id);
                 });
+
+                const ws = new WebSocket('ws://localhost:3000');
+                ws.onmessage = (e) => {
+                    updateCart(JSON.parse(e.data));
+                }
             });
 
         function abort() {
