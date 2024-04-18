@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket.IO Speed Test</title>
+</head>
+<body>
+<h1>Socket.IO Speed Test</h1>
+<div id="speedDisplay"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+<script>
+    const socket = io('http://localhost:63342'); // Update this URL with your server URL
+    socket.on('speedUpdate', (data) => {
+        document.getElementById('speedDisplay').innerText = `Speed: ${data.speed.toFixed(2)} Mbps`;
+    });
+</script>
+
+</body>
+</html>
