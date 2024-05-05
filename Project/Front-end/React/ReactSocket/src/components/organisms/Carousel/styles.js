@@ -12,8 +12,9 @@ export const CarouselContainer = styled.div`
   position: absolute;
   top: 80px;
 
-  ${({ active, duration }) => css`
+  ${({ active, duration, delay, delayTime }) => css`
     animation: ${moveLeft} ${duration} linear infinite;
     animation-play-state: ${active ? 'running' : 'paused'};
+    animation-delay: ${delay ? `${delayTime}` : '0s'};
   `}
 `;
