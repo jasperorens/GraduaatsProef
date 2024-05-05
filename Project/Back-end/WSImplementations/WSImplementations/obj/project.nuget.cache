@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "yi310ctwKXPRMa5ENhnmF+nv8fS2Mcm4DmlDzbM6DLQeyIVWcnIsOgMcom2YTGJ5FfpLSwphMMnPPKx8TUeYZQ==",
+  "dgSpecHash": "FsnUwR9UE2MkNCowv5CZDK0vvXald7xM5pxq6XM2weGBBv79sCu5pWHo1keEYBQhqi5XmoSOrwg42B7WFOUTqQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\jasper\\Documents\\WSImplementations\\WSImplementations\\WSImplementations.csproj",
+  "projectFilePath": "D:\\JASPER\\WORK\\Opleidingen\\PXL\\GraduaatsProef\\Project\\Back-end\\WSImplementations\\WSImplementations\\WSImplementations.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\jasper\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
     "C:\\Users\\jasper\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",

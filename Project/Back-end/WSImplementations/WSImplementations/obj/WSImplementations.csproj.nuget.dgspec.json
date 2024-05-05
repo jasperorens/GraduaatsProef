@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jasper\\Documents\\WSImplementations\\WSImplementations\\WSImplementations.csproj": {}
+    "D:\\JASPER\\WORK\\Opleidingen\\PXL\\GraduaatsProef\\Project\\Back-end\\WSImplementations\\WSImplementations\\WSImplementations.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jasper\\Documents\\WSImplementations\\WSImplementations\\WSImplementations.csproj": {
+    "D:\\JASPER\\WORK\\Opleidingen\\PXL\\GraduaatsProef\\Project\\Back-end\\WSImplementations\\WSImplementations\\WSImplementations.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jasper\\Documents\\WSImplementations\\WSImplementations\\WSImplementations.csproj",
+        "projectUniqueName": "D:\\JASPER\\WORK\\Opleidingen\\PXL\\GraduaatsProef\\Project\\Back-end\\WSImplementations\\WSImplementations\\WSImplementations.csproj",
         "projectName": "WSImplementations",
-        "projectPath": "C:\\Users\\jasper\\Documents\\WSImplementations\\WSImplementations\\WSImplementations.csproj",
+        "projectPath": "D:\\JASPER\\WORK\\Opleidingen\\PXL\\GraduaatsProef\\Project\\Back-end\\WSImplementations\\WSImplementations\\WSImplementations.csproj",
         "packagesPath": "C:\\Users\\jasper\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jasper\\Documents\\WSImplementations\\WSImplementations\\obj\\",
+        "outputPath": "D:\\JASPER\\WORK\\Opleidingen\\PXL\\GraduaatsProef\\Project\\Back-end\\WSImplementations\\WSImplementations\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

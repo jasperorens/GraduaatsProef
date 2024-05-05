@@ -27,10 +27,3 @@ body {
   padding: 0 !important;
 }
 
-.Carousel {
-  display: flex;
-  flex-direction: row;
-  justify-content: start;
-
-}
-
