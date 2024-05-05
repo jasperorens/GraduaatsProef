@@ -9,6 +9,8 @@ export const CarouselContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: start;
+  position: absolute;
+  top: 80px;
 
   ${({ active, duration }) => css`
     animation: ${moveLeft} ${duration} linear infinite;

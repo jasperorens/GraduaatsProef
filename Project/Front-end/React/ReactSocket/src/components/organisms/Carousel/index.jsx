@@ -22,6 +22,20 @@ function Carousel(active) {
                     backEnd={socket?.backend}
                 />
             ))}
+
+            {webSocketList.map((socket, index) => (
+                <SocketBox
+                    key={index}
+                    name={socket?.name}
+                    incoming={socket?.incoming}
+                    outgoing={socket?.outgoing}
+                    addFammily={socket?.addFamily}
+                    descriptor={socket?.descriptor}
+                    type={socket?.type}
+                    protocol={socket?.protocol}
+                    backEnd={socket?.backend}
+                />
+            ))}
         </CarouselContainer>
     );
 }
