@@ -3,7 +3,7 @@ import {
     CallField,
     CallFieldGreen,
     Container,
-    InnerContainer,
+    InnerContainer, Plain,
     RadioButton,
     RadioField,
     Row,
@@ -23,12 +23,12 @@ const SocketBox = ({ incoming, outgoing, name, descriptor, addFammily, type, pro
                 <Title>{name}</Title>
 
                 <Row>
-                    <p>incoming speed at: </p>
+                    <Plain>incoming speed at: </Plain>
                     <CallFieldGreen>{incoming}</CallFieldGreen>
                 </Row>
 
                 <Row>
-                    <p>outgoing speed at: </p>
+                    <Plain>outgoing speed at: </Plain>
                     <CallFieldGreen>{outgoing}</CallFieldGreen>
                 </Row>
             </InnerContainer>
@@ -42,19 +42,19 @@ const SocketBox = ({ incoming, outgoing, name, descriptor, addFammily, type, pro
             {clicked === true && (
                 <InnerContainer>
                     <Row>
-                        <p>Descriptor: </p>
+                        <Plain>Descriptor: </Plain>
                         <CallField>{descriptor}</CallField>
                     </Row>
                     <Row>
-                        <p>Address family: </p>
+                        <Plain>Address family: </Plain>
                         <CallField>{addFammily}</CallField>
                     </Row>
                     <Row>
-                        <p>Type: </p>
+                        <Plain>Type: </Plain>
                         <CallField>{type}</CallField>
                     </Row>
                     <Row>
-                        <p>Protocol: </p>
+                        <Plain>Protocol: </Plain>
                         <RadioField>
                             <RadioButton active={protocol?.WS}>●</RadioButton>WS
                             <RadioButton active={protocol?.WSS}>●</RadioButton>WSS
@@ -62,7 +62,7 @@ const SocketBox = ({ incoming, outgoing, name, descriptor, addFammily, type, pro
                         </RadioField>
                     </Row>
                     <Row>
-                        <p>Back-End: </p>
+                        <Plain>Back-End: </Plain>
                         <CallField>{backEnd}</CallField>
                     </Row>
                     <Arrow onClick={dropIt}>Show Less ▲</Arrow>

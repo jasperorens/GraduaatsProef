@@ -1,10 +1,12 @@
 import React from "react";
 import {Content, DisplayStyle} from "./styles.js";
 import { StyleSheetManager } from 'styled-components';
-const Layout = ({ children }) => {
+import Navbar from "../organisms/navbar/index.jsx";
+const Layout = ({ children, title }) => {
     return (
         <StyleSheetManager>
             <DisplayStyle>
+                <Navbar title={title}/>
                 <Content>
                     {children}
                 </Content>

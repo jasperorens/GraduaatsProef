@@ -1,16 +1,17 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
+import socket from "../../../public/assets/websocketIcon.png"; // Make sure path is correct
 
 export const Content = styled.div`
   display: flex;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
   top: 0;
   flex-direction: column;
   justify-content: start;
-  background: white;
 `;
+
 
 export const DisplayStyle = styled.div`
   display: flex;
@@ -22,5 +23,9 @@ export const DisplayStyle = styled.div`
   width: 100vw;
   min-height: 120vh;
   box-sizing: border-box;
-  background: white;
+  overflow: hidden;
+  //background-image: url(${socket});
+  //background-repeat: repeat;
+  //background-size: 50px 50px;
+  background-color: cadetblue;
 `;

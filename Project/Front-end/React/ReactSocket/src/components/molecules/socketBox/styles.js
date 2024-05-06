@@ -9,16 +9,20 @@ export const Container = styled.div`
   align-self: start;
   align-content: center;
   z-index: 3;
-  background-color: grey;
+  background-color: white;
   border-radius: 15px;
   display: flex;
   box-shadow: 8px 8px 20px -13px black;
   margin: 5px;
 `;
 
+export const Plain = styled.p`
+  color: black;
+`;
+
 
 export const Title = styled.h1`
-  color: #fff4c2;
+  color: darkcyan;
 `;
 
 export const InnerContainer = styled.div`
