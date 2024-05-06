@@ -4,7 +4,7 @@ export const Container = styled.div`
   flex-direction: column;
   top: 0;
   width: 400px;
-  height: ${props => props.clicked ? "650px" : "250px"};
+  height: ${props => props.$clicked ? "650px" : "300px"};
   justify-content: space-between;
   align-self: start;
   align-content: center;
@@ -15,6 +15,7 @@ export const Container = styled.div`
   box-shadow: 8px 8px 20px -13px black;
   margin: 5px;
 `;
+
 
 export const Title = styled.h1`
   color: #fff4c2;

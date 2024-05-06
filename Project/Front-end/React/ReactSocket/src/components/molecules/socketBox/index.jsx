@@ -18,7 +18,7 @@ const SocketBox = ({ incoming, outgoing, name, descriptor, addFammily, type, pro
     }
 
     return (
-        <Container clicked={clicked}>
+        <Container $clicked={clicked}>
             <InnerContainer>
                 <Title>{name}</Title>
 
