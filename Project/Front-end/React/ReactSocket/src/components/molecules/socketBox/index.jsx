@@ -43,13 +43,13 @@ const SocketBox = ({ name }) => {
                 <Title>{name}</Title>
 
                 <Row>
-                    <Plain>incoming speed at: </Plain>
-                    <CallFieldGreen>{incoming}</CallFieldGreen>
+                    <Plain>Status: </Plain>
+                    <CallFieldGreen>{socketData.details.Status}</CallFieldGreen>
                 </Row>
 
                 <Row>
-                    <Plain>outgoing speed at: </Plain>
-                    <CallFieldGreen>{outgoing}</CallFieldGreen>
+                    <Plain>Transferred: </Plain>
+                    <CallFieldGreen>{socketData.details.Transferred}</CallFieldGreen>
                 </Row>
             </InnerContainer>
 
@@ -62,28 +62,30 @@ const SocketBox = ({ name }) => {
             {clicked && (
                 <InnerContainer>
                     <Row>
-                        <Plain>Descriptor: </Plain>
-                        <CallField>{descriptor}</CallField>
-                    </Row>
-                    <Row>
-                        <Plain>Address family: </Plain>
-                        <CallField>{addFamily}</CallField> {/* Updated from addFammily to addFamily */}
-                    </Row>
-                    <Row>
-                        <Plain>Type: </Plain>
-                        <CallField>{type}</CallField>
+                        <Plain>Connection: </Plain>
+                        <CallField>{socketData.details.Connection}</CallField>
                     </Row>
                     <Row>
                         <Plain>Protocol: </Plain>
+                        <CallField>{socketData.details.Protocol}</CallField>
+                    </Row>
+                    <Row>
+                        <Plain>Protocol: </Plain>
+                        <CallField>{socketData.details.Protocol}</CallField>
+                    </Row>
+                    <Row>
+                        {/*
+                                                <Plain>Protocol: </Plain>
                         <RadioField>
                             <RadioButton active={protocol?.WS}>●</RadioButton>WS
                             <RadioButton active={protocol?.WSS}>●</RadioButton>WSS
                             <RadioButton active={protocol?.LP}>●</RadioButton>LP
                         </RadioField>
+                        */}
                     </Row>
                     <Row>
-                        <Plain>Back-End: </Plain>
-                        <CallField>{backEnd}</CallField>
+                        <Plain>Protocol: </Plain>
+                        <CallField>{socketData.details.Protocol}</CallField>
                     </Row>
                     <Arrow onClick={dropIt}>Show Less ▲</Arrow>
                 </InnerContainer>
