@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { CarouselContainer } from "./styles.js";
-import webSocketList from "../../../config/WebSocketList.js";
+import { WebSocketContext } from "../../../context/WebSocketContext.jsx"; // Ensure path is correct
 import SocketBox from "../../molecules/socketBox/index.jsx";
+
 function Carousel({ active }) {
     const [duration, setDuration] = useState("20s"); // Duration since content is doubled
     const [delayTime, setDelayTime] = useState("0s");  // Initialize delayTime
 
-    const doubledList = [...webSocketList, ...webSocketList];
+    // Use the WebSocket data from the context instead of static data
+    const { sockets } = useContext(WebSocketContext);
+
+    // Doubling the list if needed, assuming carousel cycles through the same list twice
+    const doubledList = [...sockets, ...sockets];
 
     return (
         <CarouselContainer
@@ -31,6 +36,5 @@ function Carousel({ active }) {
         </CarouselContainer>
     );
 }
-
 
 export default Carousel;

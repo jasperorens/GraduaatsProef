@@ -3,19 +3,39 @@ import {
     CallField,
     CallFieldGreen,
     Container,
-    InnerContainer, Plain,
+    InnerContainer,
+    Plain,
     RadioButton,
     RadioField,
     Row,
     Title
 } from "./styles.js";
-import { useState } from "react";
+import {useContext, useEffect, useState} from "react";
+import { WebSocketContext } from "../../../context/WebSocketContext.jsx";
 
-const SocketBox = ({ incoming, outgoing, name, descriptor, addFammily, type, protocol, backEnd }) => {
+const SocketBox = ({ name }) => {
+    const { sockets } = useContext(WebSocketContext);
+    const socketData = sockets.find(sock => sock.name === name);
     const [clicked, setClicked] = useState(false);
+    console.log(`Rendering ${name}`, new Date().toLocaleTimeString());
+
+    console.log(`Data for ${name}:`, socketData);
+
+    useEffect(() => {
+        console.log(`Component updated with new data for ${name}:`, socketData);
+    }, [socketData]);
+
+
     const dropIt = () => {
         setClicked(prevClicked => !prevClicked);
+    };
+
+    if (!socketData) {
+        return <div>Loading...</div>;
     }
+
+    // Destructuring the properties from socketData
+    const { incoming, outgoing, descriptor, addFamily, type, protocol, backEnd } = socketData;
 
     return (
         <Container $clicked={clicked}>
@@ -33,13 +53,13 @@ const SocketBox = ({ incoming, outgoing, name, descriptor, addFammily, type, pro
                 </Row>
             </InnerContainer>
 
-            {clicked === false && (
+            {!clicked && (
                 <InnerContainer>
                     <Arrow onClick={dropIt}>Show More ▼</Arrow>
                 </InnerContainer>
             )}
 
-            {clicked === true && (
+            {clicked && (
                 <InnerContainer>
                     <Row>
                         <Plain>Descriptor: </Plain>
@@ -47,7 +67,7 @@ const SocketBox = ({ incoming, outgoing, name, descriptor, addFammily, type, pro
                     </Row>
                     <Row>
                         <Plain>Address family: </Plain>
-                        <CallField>{addFammily}</CallField>
+                        <CallField>{addFamily}</CallField> {/* Updated from addFammily to addFamily */}
                     </Row>
                     <Row>
                         <Plain>Type: </Plain>
@@ -70,6 +90,7 @@ const SocketBox = ({ incoming, outgoing, name, descriptor, addFammily, type, pro
             )}
 
         </Container>
-    )
-}
+    );
+};
+
 export default SocketBox;

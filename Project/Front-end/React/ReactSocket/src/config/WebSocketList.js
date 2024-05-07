@@ -41,34 +41,6 @@ const WebSocketList = [
         },
         backend: ".NET"
     },
-    {
-        name: "12",
-        incoming: 0,
-        outgoing: 0,
-        addFamily: 0,
-        descriptor: "descriptor",
-        type: "type",
-        protocol: {
-            WS: false,
-            WSS: false,
-            LP: true
-        },
-        backend: ".NET"
-    },
-    {
-        name: "GraphQL 2",
-        incoming: 0,
-        outgoing: 0,
-        addFamily: 0,
-        descriptor: "descriptor",
-        type: "type",
-        protocol: {
-            WS: true,
-            WSS: true,
-            LP: false
-        },
-        backend: ".NET"
-    }
 ];
 
 export default WebSocketList;
