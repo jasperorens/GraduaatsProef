@@ -37,7 +37,7 @@ const WebSocketProvider = ({ children }) => {
 
     const byteLength = (str) => new TextEncoder().encode(str).length;
 
-    const sendFruitToServer = () => {
+    const sendFruitToServer = async () => {
         const fruit = fruits[fruitIndex];
         const dataSize = byteLength(fruit);
         setServerStats(prev => ({
@@ -58,7 +58,7 @@ const WebSocketProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        socket.on('dataFromServer', (data) => {
+        socket.on('dataFromServer', async (data) => {
             setServerStats(prev => ({
                 ...prev,
                 vegetable: data.vegetable,
@@ -72,7 +72,7 @@ const WebSocketProvider = ({ children }) => {
                     send: data.dataSize
                 }
             }));
-            sendFruitToServer(); // Send the next fruit to the server
+            await sendFruitToServer(); // Send the next fruit to the server
         });
 
         socket.on('serverStats', (data) => {

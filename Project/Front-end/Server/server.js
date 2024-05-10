@@ -21,7 +21,7 @@ const vegetables = [
 ];
 let vegetableIndex = 0;
 
-const INTERVAL = 1000;
+const INTERVAL = 1;
 
 const byteLength = (str) => new TextEncoder().encode(str).length;
 
@@ -31,7 +31,7 @@ io.on('connection', (clientSocket) => {
     let totalBytesSent = 0;
     let totalBytesReceived = 0;
 
-    const sendVegetable = () => {
+    const sendVegetable = async () => {
         const vegetable = vegetables[vegetableIndex];
         const dataSize = byteLength(vegetable);
         totalBytesSent += dataSize;
