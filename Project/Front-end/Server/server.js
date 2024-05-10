@@ -14,41 +14,71 @@ const io = socketIo(server, {
     }
 });
 
-socket.on('connection', (clientSocket) => {
-    let totalBytesSent = 0;
+const vegetables = [
+    "Carrot", "Broccoli", "Spinach", "Cabbage", "Potato", "Tomato", "Lettuce", "Onion", "Garlic", "Cauliflower",
+    "Cucumber", "Pepper", "Pumpkin", "Radish", "Sweet Potato", "Turnip", "Zucchini", "Asparagus", "Bean", "Beet",
+    "Celery", "Corn", "Eggplant", "Kale", "Leek", "Okra", "Parsnip", "Pea", "Squash", "Watercress"
+];
+let vegetableIndex = 0;
 
-    const sendData = () => {
-        const data = { /* your data object */ };
-        const dataSize = Buffer.byteLength(JSON.stringify(data));
+const INTERVAL = 1000;
+
+const byteLength = (str) => new TextEncoder().encode(str).length;
+
+io.on('connection', (clientSocket) => {
+    console.log('New client connected');
+
+    let totalBytesSent = 0;
+    let totalBytesReceived = 0;
+
+    const sendVegetable = () => {
+        const vegetable = vegetables[vegetableIndex];
+        const dataSize = byteLength(vegetable);
         totalBytesSent += dataSize;
 
-        console.log('Emitting data with details:', {
-            name: "exampleSocket",
-            incoming: data,
-            outgoing: dataSize,
-            details: {
-                Status: "Active",
-                Transferred: `${totalBytesSent} B`,
-                Connection: "WebSocket",
-                Protocol: "WebSocket",
-            }
-        });
+        try {
+            clientSocket.emit('dataFromServer', {
+                vegetable,
+                dataSize,
+                totalBytesSent,
+                details: {
+                    Status: "Active",
+                    Transferred: `${totalBytesSent} B`,
+                    Connection: "WebSocket",
+                    Protocol: "WebSocket",
+                }
+            });
+        } catch (err) {
+            console.error("Error sending vegetable data to client:", err);
+        }
 
-        clientSocket.emit('dataReceived', {
-            name: "exampleSocket",
-            incoming: data,
-            outgoing: dataSize,
-            details: {
-                Status: "Active",
-                Transferred: `${totalBytesSent} B`,
-                Connection: "WebSocket",
-                Protocol: "WebSocket",
-            }
-        });
+        vegetableIndex = (vegetableIndex + 1) % vegetables.length;
     };
 
-    setInterval(sendData, 1000);
+    clientSocket.on('dataFromClient', (data) => {
+        try {
+            const fruit = data.fruit;
+            const dataSize = byteLength(fruit);
+            totalBytesReceived += dataSize;
 
+            clientSocket.emit('serverStats', {
+                fruit,
+                dataSize,
+                totalBytesReceived,
+                details: {
+                    Status: "Active",
+                    Received: `${totalBytesReceived} B`,
+                    Connection: "WebSocket",
+                    Protocol: "WebSocket",
+                }
+            });
+        } catch (err) {
+            console.error("Error receiving fruit data from client:", err);
+        }
+    });
 
-    const PORT = process.env.PORT || 4000;
+    setInterval(sendVegetable, INTERVAL);
+});
+
+const PORT = process.env.PORT || 4000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
