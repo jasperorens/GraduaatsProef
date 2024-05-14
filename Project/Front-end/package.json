@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start-server": "cd Server && npm start",
+    "start-socketio-server": "cd Server && node socketIOServer.js",
+    "start-rxjs-server": "cd Server && node rxjsWebSocketServer.js",
     "start-client": "cd React/ReactSocket && npm run dev",
-    "dev": "concurrently \"npm run start-server\" \"npm run start-client\""
+    "dev": "concurrently \"npm run start-socketio-server\" \"npm run start-rxjs-server\" \"npm run start-client\""
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

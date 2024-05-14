@@ -13,11 +13,17 @@
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@hapi/hoek": "^11.0.4",
+    "mime": "^4.0.3",
+    "qs": "^6.12.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
+    "rxjs": "^7.8.1",
+    "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
-    "styled-components": "^6.1.8"
+    "styled-components": "^6.1.8",
+    "tunnel-agent": "^0.6.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
