@@ -1,4 +1,16 @@
-const INTERVAL = 50; // Reduced interval to 50 ms
+const socketIo = require('socket.io');
+
+const vegetables = [
+    "Carrot", "Broccoli", "Spinach", "Cabbage", "Potato", "Tomato", "Lettuce", "Onion", "Garlic", "Cauliflower",
+    "Cucumber", "Pepper", "Pumpkin", "Radish", "Sweet Potato", "Turnip", "Zucchini", "Asparagus", "Bean", "Beet",
+    "Celery", "Corn", "Eggplant", "Kale", "Leek", "Okra", "Parsnip", "Pea", "Squash", "Watercress"
+];
+let vegetableIndex = 0;
+let intervalId = null;
+
+const INTERVAL = 1; // Adjust interval for speed
+
+const byteLength = (str) => new TextEncoder().encode(str).length;
 
 function setupSocketIO(server) {
     const io = socketIo(server, {
@@ -15,6 +27,7 @@ function setupSocketIO(server) {
         let totalBytesReceived = 0;
 
         const sendVegetable = () => {
+            if (vegetableIndex >= vegetables.length) vegetableIndex = 0;
             const vegetable = vegetables[vegetableIndex];
             const dataSize = byteLength(vegetable);
             totalBytesSent += dataSize;
@@ -79,3 +92,5 @@ function setupSocketIO(server) {
         });
     });
 }
+
+module.exports = { setupSocketIO };
