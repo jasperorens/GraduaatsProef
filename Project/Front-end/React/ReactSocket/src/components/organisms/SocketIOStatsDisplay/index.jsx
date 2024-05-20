@@ -3,7 +3,7 @@ import { WebSocketContext } from "../../../context/WebSocketContext.jsx";
 import { Container, StatItem, Title, Value, ButtonContainer, Button } from "./styles.js";
 
 function SocketIOStatsDisplay() {
-    const { socketIOStats, startSocketIOConnection, stopSocketIOConnection } = useContext(WebSocketContext);
+    const { socketIOStats, startSocketIOConnection, stopSocketIOConnection, resetStats } = useContext(WebSocketContext);
 
     return (
         <Container>
@@ -21,11 +21,11 @@ function SocketIOStatsDisplay() {
                 <Value>{socketIOStats.vegetable}</Value>
             </StatItem>
             <StatItem>
-                <span>Total Sent:</span>
+                <span>Total Sent Bits:</span>
                 <Value>{socketIOStats.details.Transferred}</Value>
             </StatItem>
             <StatItem>
-                <span>Total Received:</span>
+                <span>Total Received Bits:</span>
                 <Value>{socketIOStats.details.Received}</Value>
             </StatItem>
             <StatItem>
@@ -36,9 +36,18 @@ function SocketIOStatsDisplay() {
                 <span>Receive Speed:</span>
                 <Value>{socketIOStats.speed.receive} B/s</Value>
             </StatItem>
+            <StatItem>
+                <span>Total Sent Objects:</span>
+                <Value>{socketIOStats.totalObjectsSent}</Value>
+            </StatItem>
+            <StatItem>
+                <span>Total Received Objects:</span>
+                <Value>{socketIOStats.totalObjectsReceived}</Value>
+            </StatItem>
             <ButtonContainer>
-                <Button onClick={startSocketIOConnection} disabled={socketIOStats.details.Status === "Connected"}>Connect Socket.IO</Button>
-                <Button onClick={stopSocketIOConnection} disabled={socketIOStats.details.Status !== "Connected"}>Disconnect Socket.IO</Button>
+                <Button onClick={startSocketIOConnection} disabled={socketIOStats.details.Status === "Connected"}>Connect</Button>
+                <Button onClick={stopSocketIOConnection} disabled={socketIOStats.details.Status !== "Connected"}>Disconnect</Button>
+                <Button onClick={resetStats}>Reset</Button>
             </ButtonContainer>
         </Container>
     );

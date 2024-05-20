@@ -5,9 +5,11 @@ import { webSocket } from 'rxjs/webSocket';
 const WebSocketContext = createContext();
 
 const WebSocketProvider = ({ children }) => {
-    const [socketIOStats, setSocketIOStats] = useState({
+    const initialState = {
         totalBytesSent: 0,
         totalBytesReceived: 0,
+        totalObjectsSent: 0,
+        totalObjectsReceived: 0,
         vegetable: "",
         fruit: "",
         details: {
@@ -21,25 +23,10 @@ const WebSocketProvider = ({ children }) => {
             send: 0,
             receive: 0,
         }
-    });
+    };
 
-    const [rxjsWebSocketStats, setRxjsWebSocketStats] = useState({
-        totalBytesSent: 0,
-        totalBytesReceived: 0,
-        vegetable: "",
-        fruit: "",
-        details: {
-            Status: "Disconnected",
-            Transferred: "",
-            Received: "",
-            Connection: "",
-            Protocol: "",
-        },
-        speed: {
-            send: 0,
-            receive: 0,
-        }
-    });
+    const [socketIOStats, setSocketIOStats] = useState(initialState);
+    const [rxjsWebSocketStats, setRxjsWebSocketStats] = useState(initialState);
 
     const [socket, setSocket] = useState(null);
     const [rxjsSocket, setRxjsSocket] = useState(null);
@@ -62,6 +49,7 @@ const WebSocketProvider = ({ children }) => {
             ...prev,
             fruit,
             totalBytesSent: prev.totalBytesSent + dataSize,
+            totalObjectsSent: prev.totalObjectsSent + 1, // Increment total sent objects
             speed: {
                 ...prev.speed,
                 send: dataSize
@@ -84,6 +72,10 @@ const WebSocketProvider = ({ children }) => {
 
         newSocket.on('connect', () => {
             console.log("Socket.IO connected");
+            setSocketIOStats(prev => ({
+                ...prev,
+                details: { ...prev.details, Status: "Connected" }
+            }));
         });
 
         newSocket.on('connect_error', (error) => {
@@ -95,7 +87,6 @@ const WebSocketProvider = ({ children }) => {
         });
 
         setSocket(newSocket);
-        setSocketIOStats(prev => ({ ...prev, details: { ...prev.details, Status: "Connected" } }));
         newSocket.emit('startSending');
     };
 
@@ -107,12 +98,8 @@ const WebSocketProvider = ({ children }) => {
             setSocket(null);
             setSocketIOStats(prev => ({
                 ...prev,
-                details: { ...prev.details, Status: "Disconnected" },
-                vegetable: "",
-                fruit: "",
-                totalBytesSent: 0,
-                totalBytesReceived: 0,
-                speed: { send: 0, receive: 0 },
+                details: { ...prev.details, Status: "Disconnected" }
+                // Retain other state values
             }));
         }
     };
@@ -125,6 +112,7 @@ const WebSocketProvider = ({ children }) => {
                     ...prev,
                     vegetable: data.vegetable,
                     totalBytesSent: data.totalBytesSent,
+                    totalObjectsReceived: prev.totalObjectsReceived + 1, // Increment total received objects
                     details: {
                         ...prev.details,
                         Transferred: data.details.Transferred
@@ -168,6 +156,7 @@ const WebSocketProvider = ({ children }) => {
             ...prev,
             fruit,
             totalBytesSent: prev.totalBytesSent + dataSize,
+            totalObjectsSent: prev.totalObjectsSent + 1, // Increment total sent objects
             speed: {
                 ...prev.speed,
                 send: dataSize
@@ -185,7 +174,10 @@ const WebSocketProvider = ({ children }) => {
         console.log("Starting RxJS WebSocket connection...");
         const subject = webSocket('ws://localhost:4002/rxjs-websocket');
         setRxjsSocket(subject);
-        setRxjsWebSocketStats(prev => ({ ...prev, details: { ...prev.details, Status: "Connected" } }));
+        setRxjsWebSocketStats(prev => ({
+            ...prev,
+            details: { ...prev.details, Status: "Connected" }
+        }));
 
         subject.subscribe(
             (msg) => {
@@ -195,6 +187,7 @@ const WebSocketProvider = ({ children }) => {
                         ...prev,
                         vegetable: data.vegetable,
                         totalBytesSent: data.totalBytesSent,
+                        totalObjectsReceived: prev.totalObjectsReceived + 1, // Increment total received objects
                         details: {
                             ...prev.details,
                             Transferred: data.details.Transferred
@@ -234,14 +227,15 @@ const WebSocketProvider = ({ children }) => {
             setRxjsSocket(null);
             setRxjsWebSocketStats(prev => ({
                 ...prev,
-                details: { ...prev.details, Status: "Disconnected" },
-                vegetable: "",
-                fruit: "",
-                totalBytesSent: 0,
-                totalBytesReceived: 0,
-                speed: { send: 0, receive: 0 },
+                details: { ...prev.details, Status: "Disconnected" }
+                // Retain other state values
             }));
         }
+    };
+
+    const resetStats = () => {
+        setSocketIOStats(initialState);
+        setRxjsWebSocketStats(initialState);
     };
 
     return (
@@ -251,7 +245,8 @@ const WebSocketProvider = ({ children }) => {
             stopSocketIOConnection,
             rxjsWebSocketStats,
             startRxjsSocketConnection,
-            stopRxjsSocketConnection
+            stopRxjsSocketConnection,
+            resetStats
         }}>
             {children}
         </WebSocketContext.Provider>
