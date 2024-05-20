@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import { webSocket } from 'rxjs/webSocket';
+import SockJS from 'sockjs-client';
 
 const WebSocketContext = createContext();
 
@@ -27,9 +28,11 @@ const WebSocketProvider = ({ children }) => {
 
     const [socketIOStats, setSocketIOStats] = useState(initialState);
     const [rxjsWebSocketStats, setRxjsWebSocketStats] = useState(initialState);
+    const [sockJSStats, setSockJSStats] = useState(initialState);
 
     const [socket, setSocket] = useState(null);
     const [rxjsSocket, setRxjsSocket] = useState(null);
+    const [sockJSSocket, setSockJSSocket] = useState(null);
 
     const fruits = [
         "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Honeydew", "Indian Fig", "Jackfruit",
@@ -233,9 +236,104 @@ const WebSocketProvider = ({ children }) => {
         }
     };
 
+    // SockJS handlers
+    const sendFruitToSockJSServer = (sockJSSocket) => {
+        const fruit = fruits[fruitIndex];
+        const dataSize = byteLength(fruit);
+        setSockJSStats(prev => ({
+            ...prev,
+            fruit,
+            totalBytesSent: prev.totalBytesSent + dataSize,
+            totalObjectsSent: prev.totalObjectsSent + 1, // Increment total sent objects
+            speed: {
+                ...prev.speed,
+                send: dataSize
+            }
+        }));
+        try {
+            sockJSSocket.send(JSON.stringify({ fruit }));
+        } catch (err) {
+            console.error("Error sending fruit data to SockJS server:", err);
+        }
+        fruitIndex = (fruitIndex + 1) % fruits.length;
+    };
+
+    const startSockJSConnection = () => {
+        console.log("Starting SockJS connection...");
+        const newSockJSSocket = new SockJS('http://localhost:4003/sockjs');
+
+        newSockJSSocket.onopen = () => {
+            console.log("SockJS connected");
+            setSockJSStats(prev => ({
+                ...prev,
+                details: { ...prev.details, Status: "Connected" }
+            }));
+            sendFruitToSockJSServer(newSockJSSocket);
+        };
+
+        newSockJSSocket.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            if (data.vegetable) {
+                setSockJSStats(prev => ({
+                    ...prev,
+                    vegetable: data.vegetable,
+                    totalBytesSent: data.totalBytesSent,
+                    totalObjectsReceived: prev.totalObjectsReceived + 1, // Increment total received objects
+                    details: {
+                        ...prev.details,
+                        Transferred: data.details.Transferred
+                    },
+                    speed: {
+                        ...prev.speed,
+                        send: data.dataSize
+                    }
+                }));
+                sendFruitToSockJSServer(newSockJSSocket);
+            } else if (data.fruit) {
+                setSockJSStats(prev => ({
+                    ...prev,
+                    totalBytesReceived: data.totalBytesReceived,
+                    details: {
+                        ...prev.details,
+                        Received: data.details.Received
+                    },
+                    speed: {
+                        ...prev.speed,
+                        receive: data.dataSize
+                    }
+                }));
+            }
+        };
+
+        newSockJSSocket.onclose = () => {
+            console.log("SockJS disconnected");
+            setSockJSStats(prev => ({
+                ...prev,
+                details: { ...prev.details, Status: "Disconnected" }
+                // Retain other state values
+            }));
+        };
+
+        setSockJSSocket(newSockJSSocket);
+    };
+
+    const stopSockJSConnection = () => {
+        if (sockJSSocket) {
+            console.log("Stopping SockJS connection...");
+            sockJSSocket.close();
+            setSockJSSocket(null);
+            setSockJSStats(prev => ({
+                ...prev,
+                details: { ...prev.details, Status: "Disconnected" }
+                // Retain other state values
+            }));
+        }
+    };
+
     const resetStats = () => {
         setSocketIOStats(initialState);
         setRxjsWebSocketStats(initialState);
+        setSockJSStats(initialState);
     };
 
     return (
@@ -246,6 +344,9 @@ const WebSocketProvider = ({ children }) => {
             rxjsWebSocketStats,
             startRxjsSocketConnection,
             stopRxjsSocketConnection,
+            sockJSStats,
+            startSockJSConnection,
+            stopSockJSConnection,
             resetStats
         }}>
             {children}
