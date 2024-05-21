@@ -251,6 +251,7 @@ const WebSocketProvider = ({ children }) => {
             }
         }));
         try {
+            console.log(`SockJS: Sending fruit: ${fruit}, size: ${dataSize} bytes`);
             sockJSSocket.send(JSON.stringify({ fruit }));
         } catch (err) {
             console.error("Error sending fruit data to SockJS server:", err);
@@ -273,6 +274,7 @@ const WebSocketProvider = ({ children }) => {
 
         newSockJSSocket.onmessage = (e) => {
             const data = JSON.parse(e.data);
+            console.log("SockJS received data:", data);
             if (data.vegetable) {
                 setSockJSStats(prev => ({
                     ...prev,
@@ -310,8 +312,11 @@ const WebSocketProvider = ({ children }) => {
             setSockJSStats(prev => ({
                 ...prev,
                 details: { ...prev.details, Status: "Disconnected" }
-                // Retain other state values
             }));
+        };
+
+        newSockJSSocket.onerror = (err) => {
+            console.error("SockJS connection error:", err);
         };
 
         setSockJSSocket(newSockJSSocket);
