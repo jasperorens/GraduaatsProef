@@ -8,7 +8,7 @@ const vegetables = [
 let vegetableIndex = 0;
 let intervalId = null;
 
-const INTERVAL = 50; // Adjust interval for speed
+const INTERVAL = 50000;
 
 const byteLength = (str) => new TextEncoder().encode(str).length;
 
@@ -25,12 +25,15 @@ function setupSocketIO(server) {
 
         let totalBytesSent = 0;
         let totalBytesReceived = 0;
+        let maxSendSpeed = 0;
+        let maxReceiveSpeed = 0;
 
         const sendVegetable = () => {
             if (vegetableIndex >= vegetables.length) vegetableIndex = 0;
             const vegetable = vegetables[vegetableIndex];
             const dataSize = byteLength(vegetable);
             totalBytesSent += dataSize;
+            maxSendSpeed = Math.max(maxSendSpeed, dataSize);
 
             try {
                 console.log(`Socket.IO: Sending vegetable: ${vegetable}, size: ${dataSize} bytes`);
@@ -38,9 +41,10 @@ function setupSocketIO(server) {
                     vegetable,
                     dataSize,
                     totalBytesSent,
+                    maxSendSpeed,
                     details: {
                         Status: "Active",
-                        Transferred: `${totalBytesSent} B`,
+                        Transferred: totalBytesSent,
                         Connection: "WebSocket",
                         Protocol: "WebSocket",
                     }
@@ -72,6 +76,7 @@ function setupSocketIO(server) {
                 const fruit = data.fruit;
                 const dataSize = byteLength(fruit);
                 totalBytesReceived += dataSize;
+                maxReceiveSpeed = Math.max(maxReceiveSpeed, dataSize);
 
                 console.log(`Socket.IO: Received fruit: ${fruit}, size: ${dataSize} bytes`);
 
@@ -79,9 +84,10 @@ function setupSocketIO(server) {
                     fruit,
                     dataSize,
                     totalBytesReceived,
+                    maxReceiveSpeed,
                     details: {
                         Status: "Active",
-                        Received: `${totalBytesReceived} B`,
+                        Received: totalBytesReceived,
                         Connection: "WebSocket",
                         Protocol: "WebSocket",
                     }

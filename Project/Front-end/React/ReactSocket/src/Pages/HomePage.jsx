@@ -5,13 +5,22 @@ import RxJSWebSocketStatsDisplay from "../components/organisms/RxJSWebSocketStat
 import SockJSStatsDisplay from "../components/organisms/SockJSStatsDisplay/index.jsx";
 import PusherStatsDisplay from "../components/organisms/PusherStatsDisplay/index.jsx";
 
+import {Boxer} from "./styles.js";
+
+
 function HomePage() {
     return (
         <Layout title="Homepage">
-            <StatsDisplay />
-            <RxJSWebSocketStatsDisplay />
-            <PusherStatsDisplay/>
-            <SockJSStatsDisplay />
+            <Boxer>
+                <StatsDisplay />
+                <RxJSWebSocketStatsDisplay />
+            </Boxer>
+            {/*
+             <Boxer>
+                <PusherStatsDisplay />
+                <SockJSStatsDisplay />
+            </Boxer>
+            */}
         </Layout>
     );
 }

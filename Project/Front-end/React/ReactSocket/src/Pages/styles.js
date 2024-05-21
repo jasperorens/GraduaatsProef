@@ -21,5 +21,10 @@ export const Player = styled.div`
   margin: 40px auto;
   padding: 10px;
   box-shadow: inset 10px 10px 20px -10px rgba(0,0,0,0.2);
+`;
 
+export const Boxer = styled.div`
+    margin: auto;
+    display: flex;
+    flex-direction: row;
 `;

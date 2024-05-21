@@ -87,6 +87,7 @@ export const RxJSWebSocketProvider = ({ children }) => {
                     setRxjsWebSocketStats(prev => ({
                         ...prev,
                         totalBytesReceived: data.totalBytesReceived,
+                        totalObjectsReceived: prev.totalObjectsReceived + 1,
                         details: {
                             ...prev.details,
                             Received: data.details.Received
@@ -118,7 +119,7 @@ export const RxJSWebSocketProvider = ({ children }) => {
     };
 
     return (
-        <RxJSWebSocketContext.Provider value={{ rxjsWebSocketStats, startRxjsSocketConnection, stopRxjsSocketConnection }}>
+        <RxJSWebSocketContext.Provider value={{ rxjsWebSocketStats, startRxjsSocketConnection, stopRxjsSocketConnection, rxjsSocket }}>
             {children}
         </RxJSWebSocketContext.Provider>
     );

@@ -24,8 +24,5 @@ export const DisplayStyle = styled.div`
   min-height: 120vh;
   box-sizing: border-box;
   overflow: hidden;
-  //background-image: url(${socket});
-  //background-repeat: repeat;
-  //background-size: 50px 50px;
   background-color: cadetblue;
 `;

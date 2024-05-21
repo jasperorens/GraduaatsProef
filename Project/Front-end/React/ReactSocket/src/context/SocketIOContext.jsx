@@ -76,6 +76,10 @@ export const SocketIOProvider = ({ children }) => {
 
         newSocket.on('disconnect', () => {
             console.log("Socket.IO disconnected");
+            setSocketIOStats(prev => ({
+                ...prev,
+                details: { ...prev.details, Status: "Disconnected" }
+            }));
         });
 
         setSocket(newSocket);
@@ -140,7 +144,7 @@ export const SocketIOProvider = ({ children }) => {
     }, [socket]);
 
     return (
-        <SocketIOContext.Provider value={{ socketIOStats, startSocketIOConnection, stopSocketIOConnection }}>
+        <SocketIOContext.Provider value={{ socketIOStats, startSocketIOConnection, stopSocketIOConnection, socket }}>
             {children}
         </SocketIOContext.Provider>
     );
