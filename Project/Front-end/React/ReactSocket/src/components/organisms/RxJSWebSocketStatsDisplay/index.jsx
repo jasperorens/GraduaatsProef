@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import { WebSocketContext } from "../../../context/WebSocketContext.jsx";
+import React from 'react';
+import { useRxJSWebSocket } from "../../../context/RxJSWebSocketContext";
 import { Container, StatItem, Title, Value, ButtonContainer, Button } from "./styles.js";
 
 function RxJSWebSocketStatsDisplay() {
-    const { rxjsWebSocketStats, startRxjsSocketConnection, stopRxjsSocketConnection } = useContext(WebSocketContext);
+    const { rxjsWebSocketStats, startRxjsSocketConnection, stopRxjsSocketConnection } = useRxJSWebSocket();
 
     return (
         <Container>

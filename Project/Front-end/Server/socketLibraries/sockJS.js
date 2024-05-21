@@ -1,98 +1,42 @@
+const express = require('express');
+const http = require('http');
 const sockjs = require('sockjs');
 
-const vegetables = [
-    "Carrot", "Broccoli", "Spinach", "Cabbage", "Potato", "Tomato", "Lettuce", "Onion", "Garlic", "Cauliflower",
-    "Cucumber", "Pepper", "Pumpkin", "Radish", "Sweet Potato", "Turnip", "Zucchini", "Asparagus", "Bean", "Beet",
-    "Celery", "Corn", "Eggplant", "Kale", "Leek", "Okra", "Parsnip", "Pea", "Squash", "Watercress"
-];
-let vegetableIndex = 0;
-let intervalId = null;
+const app = express();
+const server = http.createServer(app);
 
-const INTERVAL = 50; // Adjust interval for speed
+// Create a SockJS server
+const sockjsServer = sockjs.createServer({ prefix: '/sockjs' });
 
-const byteLength = (str) => new TextEncoder().encode(str).length;
+sockjsServer.on('connection', (conn) => {
+    console.log('SockJS: New client connected');
 
-const setupSockJS = (server) => {
-
-    const sockjsServer = sockjs.createServer();
-
-    sockjsServer.on('connection', (conn) => {
-        console.log('SockJS: New client connected');
-
-        let totalBytesSent = 0;
-        let totalBytesReceived = 0;
-
-        const sendVegetable = () => {
-            if (vegetableIndex >= vegetables.length) vegetableIndex = 0;
-            const vegetable = vegetables[vegetableIndex];
-            const dataSize = byteLength(vegetable);
-            totalBytesSent += dataSize;
-
-            try {
-                console.log(`SockJS: Sending vegetable: ${vegetable}, size: ${dataSize} bytes`);
-                conn.write(JSON.stringify({
-                    vegetable,
-                    dataSize,
-                    totalBytesSent,
-                    details: {
-                        Status: "Active",
-                        Transferred: `${totalBytesSent} B`,
-                        Connection: "SockJS",
-                        Protocol: "SockJS",
-                    }
-                }));
-            } catch (err) {
-                console.error("SockJS: Error sending vegetable data to client:", err);
-            }
-
-            vegetableIndex = (vegetableIndex + 1) % vegetables.length;
-        };
-
-        conn.on('data', (message) => {
-            try {
-                const data = JSON.parse(message);
-                const fruit = data.fruit;
-                const dataSize = byteLength(fruit);
-                totalBytesReceived += dataSize;
-
-                console.log(`SockJS: Received fruit: ${fruit}, size: ${dataSize} bytes`);
-
-                conn.write(JSON.stringify({
-                    fruit,
-                    dataSize,
-                    totalBytesReceived,
-                    details: {
-                        Status: "Active",
-                        Received: `${totalBytesReceived} B`,
-                        Connection: "SockJS",
-                        Protocol: "SockJS",
-                    }
-                }));
-
-                if (!intervalId) {
-                    intervalId = setInterval(sendVegetable, INTERVAL);
-                }
-            } catch (err) {
-                console.error("SockJS: Error processing received data:", err);
-            }
-        });
-
-        conn.on('close', () => {
-            clearInterval(intervalId);
-            intervalId = null;
-            console.log('SockJS: Client disconnected');
-        });
-
-        conn.on('error', (err) => {
-            console.error('SockJS: Connection error:', err);
-        });
+    conn.on('data', (message) => {
+        console.log('SockJS: Received message:', message);
+        // Echo the message back
+        conn.write(message);
     });
 
-    sockjsServer.on('error', (err) => {
-        console.error('SockJS: Server error:', err);
+    conn.on('close', () => {
+        console.log('SockJS: Client disconnected');
     });
+});
 
-    sockjsServer.installHandlers(server, { prefix: '/sockjs' });
-};
+// Attach SockJS server to HTTP server
+sockjsServer.installHandlers(server);
 
-module.exports = { setupSockJS };
+const PORT = process.env.PORT || 4003;
+server.listen(PORT, () => {
+    console.log(`SockJS Server running on port ${PORT}`);
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error('Express error:', err.stack);
+    next(err); // Just log the error and proceed without sending a custom response
+});
+
+// Server error handling
+server.on('error', (error) => {
+    console.error(`HTTP server error: ${error.message}`);
+});

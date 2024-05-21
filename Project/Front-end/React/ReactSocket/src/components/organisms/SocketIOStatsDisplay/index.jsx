@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import { WebSocketContext } from "../../../context/WebSocketContext.jsx";
+import { useSocketIO } from "../../../context/SocketIOContext";
 import { Container, StatItem, Title, Value, ButtonContainer, Button } from "./styles.js";
 
 function SocketIOStatsDisplay() {
-    const { socketIOStats, startSocketIOConnection, stopSocketIOConnection, resetStats } = useContext(WebSocketContext);
+    const { socketIOStats, startSocketIOConnection, stopSocketIOConnection } = useSocketIO();
 
     return (
         <Container>
@@ -47,7 +47,6 @@ function SocketIOStatsDisplay() {
             <ButtonContainer>
                 <Button onClick={startSocketIOConnection} disabled={socketIOStats.details.Status === "Connected"}>Connect</Button>
                 <Button onClick={stopSocketIOConnection} disabled={socketIOStats.details.Status !== "Connected"}>Disconnect</Button>
-                <Button onClick={resetStats}>Reset</Button>
             </ButtonContainer>
         </Container>
     );
