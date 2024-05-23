@@ -8,7 +8,7 @@ const vegetables = [
 let vegetableIndex = 0;
 let intervalId = null;
 
-const INTERVAL = 50000;
+const INTERVAL = 5000; // Adjusted interval for demonstration purposes
 
 const byteLength = (str) => new TextEncoder().encode(str).length;
 

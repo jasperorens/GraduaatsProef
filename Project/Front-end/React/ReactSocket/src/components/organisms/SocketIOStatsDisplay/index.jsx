@@ -41,6 +41,8 @@ function SocketIOStatsDisplay() {
         };
 
         if (socket) {
+            console.log("Socket is connected, setting up listeners");
+
             socket.on('dataFromServer', (data) => {
                 console.log('Data from server:', data);
                 updateExcludedOverheadReceive(data);
@@ -57,6 +59,7 @@ function SocketIOStatsDisplay() {
             });
 
             return () => {
+                console.log("Cleaning up socket listeners");
                 socket.off('dataFromServer');
                 socket.off('serverStats');
                 socket.off('dataFromClient');
@@ -87,7 +90,6 @@ function SocketIOStatsDisplay() {
                 <span>Total Received Bytes:</span>
                 <Value>{socketIOStats.details.Received} B</Value>
             </StatItem>
-            {/*
             <StatItem>
                 <span>Excluded Overhead Sent:</span>
                 <Value>{excludedOverheadSend} B</Value>
@@ -96,7 +98,6 @@ function SocketIOStatsDisplay() {
                 <span>Excluded Overhead Received:</span>
                 <Value>{excludedOverheadReceive} B</Value>
             </StatItem>
-            */}
             <StatItem>
                 <span>Send Speed:</span>
                 <Value>{socketIOStats.speed.send} B/s</Value>
@@ -122,8 +123,8 @@ function SocketIOStatsDisplay() {
                 <Value>{socketIOStats.totalObjectsReceived}</Value>
             </StatItem>
             <ButtonContainer>
-                <Button onClick={startSocketIOConnection} disabled={socketIOStats.details.Status === "Connected"}>Connect</Button>
-                <Button onClick={stopSocketIOConnection} disabled={socketIOStats.details.Status !== "Connected"}>Disconnect</Button>
+                <Button onClick={() => { console.log('Connect button clicked'); startSocketIOConnection(); }} disabled={socketIOStats.details.Status === "Connected"}>Connect</Button>
+                <Button onClick={() => { console.log('Disconnect button clicked'); stopSocketIOConnection(); }} disabled={socketIOStats.details.Status !== "Connected"}>Disconnect</Button>
             </ButtonContainer>
         </Container>
     );

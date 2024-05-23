@@ -34,7 +34,7 @@ export const SocketIOProvider = ({ children }) => {
 
     const byteLength = (str) => new TextEncoder().encode(str).length;
 
-    const sendFruitToServer = async () => {
+    const sendFruitToServer = (socket) => {
         const fruit = fruits[fruitIndex];
         const dataSize = byteLength(fruit);
         setSocketIOStats(prev => ({
@@ -61,6 +61,7 @@ export const SocketIOProvider = ({ children }) => {
         const newSocket = io('http://localhost:4001', {
             transports: ['websocket']
         });
+        setSocket(newSocket);
 
         newSocket.on('connect', () => {
             console.log("Socket.IO connected");
@@ -68,6 +69,9 @@ export const SocketIOProvider = ({ children }) => {
                 ...prev,
                 details: { ...prev.details, Status: "Connected" }
             }));
+
+            // Start sending data immediately upon connection
+            sendFruitToServer(newSocket);
         });
 
         newSocket.on('connect_error', (error) => {
@@ -82,14 +86,46 @@ export const SocketIOProvider = ({ children }) => {
             }));
         });
 
-        setSocket(newSocket);
-        newSocket.emit('startSending');
+        newSocket.on('dataFromServer', (data) => {
+            console.log('Data received from server:', data);
+            setSocketIOStats(prev => ({
+                ...prev,
+                vegetable: data.vegetable,
+                totalBytesSent: data.totalBytesSent,
+                totalObjectsReceived: prev.totalObjectsReceived + 1,
+                details: {
+                    ...prev.details,
+                    Transferred: data.details.Transferred
+                },
+                speed: {
+                    ...prev.speed,
+                    send: data.dataSize
+                }
+            }));
+            sendFruitToServer(newSocket);
+        });
+
+        newSocket.on('serverStats', (data) => {
+            console.log('Server stats received:', data);
+            setSocketIOStats(prev => ({
+                ...prev,
+                totalBytesReceived: data.totalBytesReceived,
+                totalObjectsReceived: prev.totalObjectsReceived + 1,
+                details: {
+                    ...prev.details,
+                    Received: data.details.Received
+                },
+                speed: {
+                    ...prev.speed,
+                    receive: data.dataSize
+                }
+            }));
+        });
     };
 
     const stopSocketIOConnection = () => {
         if (socket) {
             console.log("Stopping Socket.IO connection...");
-            socket.emit('stopSending');
             socket.disconnect();
             setSocket(null);
             setSocketIOStats(prev => ({
@@ -117,7 +153,7 @@ export const SocketIOProvider = ({ children }) => {
                         send: data.dataSize
                     }
                 }));
-                sendFruitToServer();
+                sendFruitToServer(socket);
             });
 
             socket.on('serverStats', (data) => {
@@ -125,6 +161,7 @@ export const SocketIOProvider = ({ children }) => {
                 setSocketIOStats(prev => ({
                     ...prev,
                     totalBytesReceived: data.totalBytesReceived,
+                    totalObjectsReceived: prev.totalObjectsReceived + 1,
                     details: {
                         ...prev.details,
                         Received: data.details.Received
