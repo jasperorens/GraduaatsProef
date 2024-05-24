@@ -128,6 +128,7 @@ export const SocketIOProvider = ({ children }) => {
     const stopSocketIOConnection = () => {
         if (socket) {
             console.log("Stopping Socket.IO connection...");
+            socket.emit('stopSending'); // Inform the server to stop sending data
             socket.disconnect();
             setSocket(null);
             setSocketIOStats(prev => ({
@@ -136,6 +137,7 @@ export const SocketIOProvider = ({ children }) => {
             }));
         }
     };
+
 
 /*
     useEffect(() => {

@@ -90,7 +90,8 @@ function SocketIOStatsDisplay() {
                 <span>Total Received Bytes:</span>
                 <Value>{socketIOStats.details.Received} B</Value>
             </StatItem>
-            <StatItem>
+            {/*
+             <StatItem>
                 <span>Excluded Overhead Sent:</span>
                 <Value>{excludedOverheadSend} B</Value>
             </StatItem>
@@ -98,6 +99,7 @@ function SocketIOStatsDisplay() {
                 <span>Excluded Overhead Received:</span>
                 <Value>{excludedOverheadReceive} B</Value>
             </StatItem>
+            */}
             <StatItem>
                 <span>Send Speed:</span>
                 <Value>{socketIOStats.speed.send} B/s</Value>

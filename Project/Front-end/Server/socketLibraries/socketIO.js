@@ -100,7 +100,15 @@ function setupSocketIO(server) {
             }
         });
 
+        clientSocket.on('disconnect', () => {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+                console.log('Socket.IO: Client disconnected, stopped sending data');
+            }
+        });
     });
+
 }
 
 module.exports = { setupSocketIO };
