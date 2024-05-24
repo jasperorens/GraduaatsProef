@@ -71,7 +71,8 @@ export const SocketIOProvider = ({ children }) => {
             }));
 
             // Start sending data immediately upon connection
-            sendFruitToServer(newSocket);
+            newSocket.emit('startSending'); // Send startSending event to the server
+            sendFruitToServer(newSocket); // Send initial fruit
         });
 
         newSocket.on('connect_error', (error) => {
@@ -102,7 +103,7 @@ export const SocketIOProvider = ({ children }) => {
                     send: data.dataSize
                 }
             }));
-            sendFruitToServer(newSocket);
+            sendFruitToServer(newSocket); // Send fruit back to server to keep the loop
         });
 
         newSocket.on('serverStats', (data) => {
@@ -123,6 +124,7 @@ export const SocketIOProvider = ({ children }) => {
         });
     };
 
+
     const stopSocketIOConnection = () => {
         if (socket) {
             console.log("Stopping Socket.IO connection...");
@@ -135,6 +137,7 @@ export const SocketIOProvider = ({ children }) => {
         }
     };
 
+/*
     useEffect(() => {
         if (socket) {
             socket.on('dataFromServer', (data) => {
@@ -179,6 +182,7 @@ export const SocketIOProvider = ({ children }) => {
             };
         }
     }, [socket]);
+ */
 
     return (
         <SocketIOContext.Provider value={{ socketIOStats, startSocketIOConnection, stopSocketIOConnection, socket }}>

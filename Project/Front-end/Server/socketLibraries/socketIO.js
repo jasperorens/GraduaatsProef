@@ -8,7 +8,7 @@ const vegetables = [
 let vegetableIndex = 0;
 let intervalId = null;
 
-const INTERVAL = 5000; // Adjusted interval for demonstration purposes
+const INTERVAL = 100;
 
 const byteLength = (str) => new TextEncoder().encode(str).length;
 
@@ -92,10 +92,14 @@ function setupSocketIO(server) {
                         Protocol: "WebSocket",
                     }
                 });
+
+                sendVegetable(); // Send vegetable immediately after receiving fruit
+
             } catch (err) {
                 console.error("Socket.IO: Error receiving fruit data from client:", err);
             }
         });
+
     });
 }
 
