@@ -5,12 +5,13 @@ const { Server } = require('ws');
 
 const vegetables = [
     "Carrot", "Broccoli", "Spinach", "Cabbage", "Potato", "Tomato", "Lettuce", "Onion", "Garlic", "Cauliflower",
-    // Add more vegetables here
+    "Cucumber", "Pepper", "Pumpkin", "Radish", "Sweet Potato", "Turnip", "Zucchini", "Asparagus", "Bean", "Beet",
+    "Celery", "Corn", "Eggplant", "Kale", "Leek", "Okra", "Parsnip", "Pea", "Squash", "Watercress"
 ];
 let vegetableIndex = 0;
 let intervalId = null;
 
-const INTERVAL = 1000;
+const INTERVAL = 1;
 
 const byteLength = (str) => new TextEncoder().encode(str).length;
 

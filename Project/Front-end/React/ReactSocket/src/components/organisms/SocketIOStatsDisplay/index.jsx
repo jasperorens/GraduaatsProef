@@ -4,14 +4,16 @@ import { Container, StatItem, Title, Value, ButtonContainer, Button } from "./st
 
 function SocketIOStatsDisplay() {
     const { socketIOStats, startSocketIOConnection, stopSocketIOConnection, socket } = useSocketIO();
-
-    // State variables for maximum speeds
+    const [calculateResult, setCalculateResult] = useState(0);
     const [maxSendSpeed, setMaxSendSpeed] = useState(0);
     const [maxReceiveSpeed, setMaxReceiveSpeed] = useState(0);
 
     // State variables for excluded overhead
     const [excludedOverheadSend, setExcludedOverheadSend] = useState(0);
     const [excludedOverheadReceive, setExcludedOverheadReceive] = useState(0);
+
+    // State variable for disabling the Disconnect button
+    const [disableDisconnect, setDisableDisconnect] = useState(false);
 
     // Byte length function
     const byteLength = (str) => new TextEncoder().encode(str).length;
@@ -25,6 +27,15 @@ function SocketIOStatsDisplay() {
             setMaxReceiveSpeed(socketIOStats.speed.receive);
         }
     }, [socketIOStats.speed]);
+
+    //Taking in to account that this triggers to late i have calculated it to stop on 80000 by reducing
+    //it by 339
+    useEffect(() => {
+        if (socketIOStats.totalObjectsReceived >= 80000) {
+            stopSocketIOConnection();
+            setDisableDisconnect(true);
+        }
+    }, [socketIOStats.totalObjectsReceived]);
 
     useEffect(() => {
         const updateExcludedOverheadSend = (fruit) => {
@@ -67,6 +78,11 @@ function SocketIOStatsDisplay() {
         }
     }, [socket]);
 
+    function calculate() {
+        let result = socketIOStats.details.Received / socketIOStats.totalObjectsReceived;
+        setCalculateResult(result);
+    }
+
     return (
         <Container>
             <Title>Socket.IO Data Transfer Stats</Title>
@@ -90,16 +106,6 @@ function SocketIOStatsDisplay() {
                 <span>Total Received Bytes:</span>
                 <Value>{socketIOStats.details.Received} B</Value>
             </StatItem>
-            {/*
-             <StatItem>
-                <span>Excluded Overhead Sent:</span>
-                <Value>{excludedOverheadSend} B</Value>
-            </StatItem>
-            <StatItem>
-                <span>Excluded Overhead Received:</span>
-                <Value>{excludedOverheadReceive} B</Value>
-            </StatItem>
-            */}
             <StatItem>
                 <span>Send Speed:</span>
                 <Value>{socketIOStats.speed.send} B/s</Value>
@@ -124,9 +130,14 @@ function SocketIOStatsDisplay() {
                 <span>Total Received Objects:</span>
                 <Value>{socketIOStats.totalObjectsReceived}</Value>
             </StatItem>
+            <StatItem>
+                <span>Average package size:</span>
+                <Value>{calculateResult}</Value>
+            </StatItem>
             <ButtonContainer>
                 <Button onClick={() => { console.log('Connect button clicked'); startSocketIOConnection(); }} disabled={socketIOStats.details.Status === "Connected"}>Connect</Button>
-                <Button onClick={() => { console.log('Disconnect button clicked'); stopSocketIOConnection(); }} disabled={socketIOStats.details.Status !== "Connected"}>Disconnect</Button>
+                <Button onClick={() => { console.log('Disconnect button clicked'); stopSocketIOConnection(); }} disabled={disableDisconnect || socketIOStats.details.Status !== "Connected"}>Disconnect</Button>
+                <Button onClick={calculate}>Calculate size</Button>
             </ButtonContainer>
         </Container>
     );

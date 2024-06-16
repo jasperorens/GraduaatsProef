@@ -8,7 +8,7 @@ const RxJSWebSocketStatsDisplay = () => {
     // State variables for maximum speeds
     const [maxSendSpeed, setMaxSendSpeed] = useState(0);
     const [maxReceiveSpeed, setMaxReceiveSpeed] = useState(0);
-
+    const [calculateResult, setCalculateResult] = useState(0);
     // State variables for excluded overhead
     const [excludedOverheadSend, setExcludedOverheadSend] = useState(0);
     const [excludedOverheadReceive, setExcludedOverheadReceive] = useState(0);
@@ -67,6 +67,11 @@ const RxJSWebSocketStatsDisplay = () => {
         }
     }, [rxjsSocket]);
 
+    function calculate() {
+        let result = rxjsWebSocketStats.details.Received / rxjsWebSocketStats.totalObjectsReceived
+        setCalculateResult(result);
+    }
+
     return (
         <Container>
             <Title>RxJS WebSocket Data Transfer Stats</Title>
@@ -124,9 +129,14 @@ const RxJSWebSocketStatsDisplay = () => {
                 <span>Total Received Objects:</span>
                 <Value>{rxjsWebSocketStats.totalObjectsReceived}</Value>
             </StatItem>
+            <StatItem>
+                <span>Average package size</span>
+                <span>{calculateResult}</span>
+            </StatItem>
             <ButtonContainer>
                 <Button onClick={startRxjsSocketConnection} disabled={rxjsWebSocketStats.details.Status === "Connected"}>Connect</Button>
                 <Button onClick={stopRxjsSocketConnection} disabled={rxjsWebSocketStats.details.Status !== "Connected"}>Disconnect</Button>
+                <Button onClick={calculate}>Calculate size</Button>
             </ButtonContainer>
         </Container>
     );

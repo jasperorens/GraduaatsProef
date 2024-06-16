@@ -4,9 +4,17 @@ import { Container, StatItem, Title, Value, ButtonContainer, Button } from "../S
 
 const WsStatsDisplay = ({ url, protocol }) => {
     const { wsStats, startWsSocketConnection, stopWsSocketConnection } = useWebSocket();
-
+    const [calculateResult, setCalculateResult] = useState(0);
+    const [disableDisconnect, setDisableDisconnect] = useState(false);
     const [maxSendSpeed, setMaxSendSpeed] = useState(0);
     const [maxReceiveSpeed, setMaxReceiveSpeed] = useState(0);
+
+    useEffect(() => {
+        if (wsStats.totalObjectsReceived >= 80000) {
+            stopWsSocketConnection();
+            setDisableDisconnect(true);
+        }
+    }, [wsStats.totalObjectsReceived]);
 
     useEffect(() => {
         if (wsStats.speed.send > maxSendSpeed) {
@@ -16,6 +24,11 @@ const WsStatsDisplay = ({ url, protocol }) => {
             setMaxReceiveSpeed(wsStats.speed.receive);
         }
     }, [wsStats.speed]);
+
+    function calculate() {
+        let result = wsStats.details.Received / wsStats.totalObjectsReceived
+        setCalculateResult(result);
+    }
 
     return (
         <Container>
@@ -64,9 +77,14 @@ const WsStatsDisplay = ({ url, protocol }) => {
                 <span>Total Received Objects:</span>
                 <Value>{wsStats.totalObjectsReceived}</Value>
             </StatItem>
+            <StatItem>
+                <span>Average package size</span>
+                <span>{calculateResult}</span>
+            </StatItem>
             <ButtonContainer>
                 <Button onClick={() => startWsSocketConnection(url)} disabled={wsStats.details.Status === "Connected"}>Connect</Button>
-                <Button onClick={stopWsSocketConnection} disabled={wsStats.details.Status !== "Connected"}>Disconnect</Button>
+                <Button onClick={() => { console.log('Disconnect button clicked'); stopWsSocketConnection(); }} disabled={disableDisconnect || wsStats.details.Status !== "Connected"}>Disconnect</Button>
+                <Button onClick={calculate}>Calculate size</Button>
             </ButtonContainer>
         </Container>
     );

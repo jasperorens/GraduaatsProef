@@ -9,6 +9,8 @@ let vegetableIndex = 0;
 let intervalId = null;
 
 const INTERVAL = 1;
+const MAX_VEGETABLES = 80000; // Max number of vegetables to send
+let vegetablesSentCount = 0;
 
 const byteLength = (str) => new TextEncoder().encode(str).length;
 
@@ -29,6 +31,13 @@ function setupSocketIO(server) {
         let maxReceiveSpeed = 0;
 
         const sendVegetable = () => {
+            if (vegetablesSentCount >= MAX_VEGETABLES) {
+                clearInterval(intervalId);
+                clientSocket.disconnect();
+                console.log('Socket.IO: Reached max vegetables sent. Disconnecting client.');
+                return;
+            }
+
             if (vegetableIndex >= vegetables.length) vegetableIndex = 0;
             const vegetable = vegetables[vegetableIndex];
             const dataSize = byteLength(vegetable);
@@ -49,6 +58,8 @@ function setupSocketIO(server) {
                         Protocol: "WebSocket",
                     }
                 });
+
+                vegetablesSentCount++; // Increment the counter
             } catch (err) {
                 console.error("Socket.IO: Error sending vegetable data to client:", err);
             }

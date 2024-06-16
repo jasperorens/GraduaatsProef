@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import { fruits } from '../constants/fruits'; // Importeer fruits uit hetzelfde bestand
 
 const WebSocketContext = createContext();
 
@@ -31,11 +32,6 @@ export const WebSocketProvider = ({ children }) => {
     const byteLength = (str) => new TextEncoder().encode(str).length;
 
     let fruitIndex = 0;
-
-    const fruits = [
-        "Apple", "Banana", "Cherry", "Date", "Elderberry", "Fig", "Grape", "Honeydew", "Indian Fig", "Jackfruit",
-        // Add more fruits here
-    ];
 
     const sendFruitToWsServer = (wsInstance) => {
         const fruit = fruits[fruitIndex];

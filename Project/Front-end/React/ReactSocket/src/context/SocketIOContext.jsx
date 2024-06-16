@@ -103,7 +103,7 @@ export const SocketIOProvider = ({ children }) => {
                     send: data.dataSize
                 }
             }));
-            sendFruitToServer(newSocket); // Send fruit back to server to keep the loop
+            sendFruitToServer(newSocket);
         });
 
         newSocket.on('serverStats', (data) => {
