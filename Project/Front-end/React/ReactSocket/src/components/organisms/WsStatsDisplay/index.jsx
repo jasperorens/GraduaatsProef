@@ -37,13 +37,19 @@ const WsStatsDisplay = ({ url, protocol }) => {
                 <span>Connection Status:</span>
                 <Value>{wsStats.details.Status}</Value>
             </StatItem>
-            <StatItem>
+            {/*
+                        <StatItem>
                 <span>Fruit Sent:</span>
                 <Value>{wsStats.fruit}</Value>
             </StatItem>
             <StatItem>
                 <span>Vegetable Received:</span>
                 <Value>{wsStats.vegetable}</Value>
+            </StatItem>
+            */}
+            &nbsp;
+            <StatItem>
+                <Value>Bytes:</Value>
             </StatItem>
             <StatItem>
                 <span>Total Sent Bytes:</span>
@@ -53,13 +59,19 @@ const WsStatsDisplay = ({ url, protocol }) => {
                 <span>Total Received Bytes:</span>
                 <Value>{wsStats.details.Received} B</Value>
             </StatItem>
-            <StatItem>
+            {/*
+                        <StatItem>
                 <span>Send Speed:</span>
                 <Value>{wsStats.speed.send} B/s</Value>
             </StatItem>
             <StatItem>
                 <span>Receive Speed:</span>
                 <Value>{wsStats.speed.receive} B/s</Value>
+            </StatItem>
+            */}
+            &nbsp;
+            <StatItem>
+                <Value>Speed:</Value>
             </StatItem>
             <StatItem>
                 <span>Max Send Speed:</span>
@@ -69,6 +81,10 @@ const WsStatsDisplay = ({ url, protocol }) => {
                 <span>Max Receive Speed:</span>
                 <Value>{maxReceiveSpeed} B/s</Value>
             </StatItem>
+            &nbsp;
+            <StatItem>
+                <Value>Objects:</Value>
+            </StatItem>
             <StatItem>
                 <span>Total Sent Objects:</span>
                 <Value>{wsStats.totalObjectsSent}</Value>
@@ -77,14 +93,16 @@ const WsStatsDisplay = ({ url, protocol }) => {
                 <span>Total Received Objects:</span>
                 <Value>{wsStats.totalObjectsReceived}</Value>
             </StatItem>
+            {/*
             <StatItem>
-                <span>Average package size</span>
-                <span>{calculateResult}</span>
+                <span>Average package size:</span>
+                <Value>{calculateResult}</Value>
             </StatItem>
+            */}
             <ButtonContainer>
                 <Button onClick={() => startWsSocketConnection(url)} disabled={wsStats.details.Status === "Connected"}>Connect</Button>
                 <Button onClick={() => { console.log('Disconnect button clicked'); stopWsSocketConnection(); }} disabled={disableDisconnect || wsStats.details.Status !== "Connected"}>Disconnect</Button>
-                <Button onClick={calculate}>Calculate size</Button>
+                {/* <Button onClick={calculate}>Calculate size</Button> */}
             </ButtonContainer>
         </Container>
     );

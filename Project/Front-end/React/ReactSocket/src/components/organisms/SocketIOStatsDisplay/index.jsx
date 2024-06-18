@@ -90,13 +90,19 @@ function SocketIOStatsDisplay() {
                 <span>Connection Status:</span>
                 <Value>{socketIOStats.details.Status}</Value>
             </StatItem>
-            <StatItem>
+            {/*
+                        <StatItem>
                 <span>Fruit Sent:</span>
                 <Value>{socketIOStats.fruit}</Value>
             </StatItem>
             <StatItem>
                 <span>Vegetable Received:</span>
                 <Value>{socketIOStats.vegetable}</Value>
+            </StatItem>
+            */}
+            &nbsp;
+            <StatItem>
+                <Value>Bytes:</Value>
             </StatItem>
             <StatItem>
                 <span>Total Sent Bytes:</span>
@@ -106,13 +112,19 @@ function SocketIOStatsDisplay() {
                 <span>Total Received Bytes:</span>
                 <Value>{socketIOStats.details.Received} B</Value>
             </StatItem>
-            <StatItem>
+            {/*
+                        <StatItem>
                 <span>Send Speed:</span>
                 <Value>{socketIOStats.speed.send} B/s</Value>
             </StatItem>
             <StatItem>
                 <span>Receive Speed:</span>
                 <Value>{socketIOStats.speed.receive} B/s</Value>
+            </StatItem>
+            */}
+            &nbsp;
+            <StatItem>
+                <Value>Speed:</Value>
             </StatItem>
             <StatItem>
                 <span>Max Send Speed:</span>
@@ -122,6 +134,10 @@ function SocketIOStatsDisplay() {
                 <span>Max Receive Speed:</span>
                 <Value>{maxReceiveSpeed} B/s</Value>
             </StatItem>
+            &nbsp;
+            <StatItem>
+                <Value>Objects:</Value>
+            </StatItem>
             <StatItem>
                 <span>Total Sent Objects:</span>
                 <Value>{socketIOStats.totalObjectsSent}</Value>
@@ -130,14 +146,16 @@ function SocketIOStatsDisplay() {
                 <span>Total Received Objects:</span>
                 <Value>{socketIOStats.totalObjectsReceived}</Value>
             </StatItem>
+            {/*
             <StatItem>
                 <span>Average package size:</span>
                 <Value>{calculateResult}</Value>
             </StatItem>
+            */}
             <ButtonContainer>
                 <Button onClick={() => { console.log('Connect button clicked'); startSocketIOConnection(); }} disabled={socketIOStats.details.Status === "Connected"}>Connect</Button>
                 <Button onClick={() => { console.log('Disconnect button clicked'); stopSocketIOConnection(); }} disabled={disableDisconnect || socketIOStats.details.Status !== "Connected"}>Disconnect</Button>
-                <Button onClick={calculate}>Calculate size</Button>
+                {/* <Button onClick={calculate}>Calculate size</Button> */}
             </ButtonContainer>
         </Container>
     );

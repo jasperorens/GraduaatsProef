@@ -79,13 +79,19 @@ const RxJSWebSocketStatsDisplay = () => {
                 <span>Connection Status:</span>
                 <Value>{rxjsWebSocketStats.details.Status}</Value>
             </StatItem>
-            <StatItem>
+            {/*
+                        <StatItem>
                 <span>Fruit Sent:</span>
                 <Value>{rxjsWebSocketStats.fruit}</Value>
             </StatItem>
             <StatItem>
                 <span>Vegetable Received:</span>
                 <Value>{rxjsWebSocketStats.vegetable}</Value>
+            </StatItem>
+            */}
+            &nbsp;
+            <StatItem>
+                <Value>Bytes:</Value>
             </StatItem>
             <StatItem>
                 <span>Total Sent Bytes:</span>
@@ -104,7 +110,7 @@ const RxJSWebSocketStatsDisplay = () => {
                 <span>Excluded Overhead Received:</span>
                 <Value>{excludedOverheadReceive} B</Value>
             </StatItem>
-            */}
+
             <StatItem>
                 <span>Send Speed:</span>
                 <Value>{rxjsWebSocketStats.speed.send} B/s</Value>
@@ -112,6 +118,11 @@ const RxJSWebSocketStatsDisplay = () => {
             <StatItem>
                 <span>Receive Speed:</span>
                 <Value>{rxjsWebSocketStats.speed.receive} B/s</Value>
+            </StatItem>
+                        */}
+            &nbsp;
+            <StatItem>
+                <Value>Speed:</Value>
             </StatItem>
             <StatItem>
                 <span>Max Send Speed:</span>
@@ -121,6 +132,10 @@ const RxJSWebSocketStatsDisplay = () => {
                 <span>Max Receive Speed:</span>
                 <Value>{maxReceiveSpeed} B/s</Value>
             </StatItem>
+            &nbsp;
+            <StatItem>
+                <Value>Objects:</Value>
+            </StatItem>
             <StatItem>
                 <span>Total Sent Objects:</span>
                 <Value>{rxjsWebSocketStats.totalObjectsSent}</Value>
@@ -129,14 +144,16 @@ const RxJSWebSocketStatsDisplay = () => {
                 <span>Total Received Objects:</span>
                 <Value>{rxjsWebSocketStats.totalObjectsReceived}</Value>
             </StatItem>
+            {/*
             <StatItem>
-                <span>Average package size</span>
-                <span>{calculateResult}</span>
+                <span>Average package size:</span>
+                <Value>{calculateResult}</Value>
             </StatItem>
+            */}
             <ButtonContainer>
                 <Button onClick={startRxjsSocketConnection} disabled={rxjsWebSocketStats.details.Status === "Connected"}>Connect</Button>
                 <Button onClick={stopRxjsSocketConnection} disabled={rxjsWebSocketStats.details.Status !== "Connected"}>Disconnect</Button>
-                <Button onClick={calculate}>Calculate size</Button>
+                {/* <Button onClick={calculate}>Calculate size</Button> */}
             </ButtonContainer>
         </Container>
     );
